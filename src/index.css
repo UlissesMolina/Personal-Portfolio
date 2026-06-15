@@ -330,6 +330,24 @@
   }
 }
 
+/* ── nav header — full-width bottom border ── */
+.nav-header {
+  position: relative;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.nav-header::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  width: 100vw;
+  height: 1px;
+  transform: translateX(-50%);
+  background: var(--border-color);
+  pointer-events: none;
+}
+
 /* ── page wrapper ── */
 .page-wrapper {
   position: relative;
@@ -346,8 +364,21 @@
 
 /* ── section strip ── */
 .section-strip {
+  position: relative;
   padding: 36px 32px;
   border-top: 1px solid var(--border-color);
+}
+
+.section-strip::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  width: 100vw;
+  height: 1px;
+  transform: translateX(-50%);
+  background: var(--border-color);
+  pointer-events: none;
 }
 
 @media (max-width: 719px) {
@@ -359,6 +390,12 @@
   flex: 1;
   height: 0.5px;
   background: var(--border-color);
+  transform-origin: left;
+  transition: transform 240ms ease, opacity 240ms ease;
+}
+
+.section-strip:hover .divider-line {
+  transform: scaleX(1.04);
 }
 
 /* widget / card surface — used sparingly for media cards only */
@@ -714,6 +751,17 @@
 /* ── project card hover — accent bar brightens + lift ── */
 .project-card {
   transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.project-actions {
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.project-card:hover .project-actions {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .project-card:hover {

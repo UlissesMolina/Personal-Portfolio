@@ -10,7 +10,10 @@ const NOW_PLAYING_URL =
 const RECENTLY_PLAYED_URL =
   "https://api.spotify.com/v1/me/player/recently-played?limit=3";
 
-const headers = { "Content-Type": "application/json" };
+const headers = {
+  "Content-Type": "application/json",
+  "Cache-Control": "no-cache, no-store, must-revalidate",
+};
 
 async function getAccessToken(): Promise<string> {
   const res = await fetch(TOKEN_URL, {
@@ -93,6 +96,7 @@ export default async (_req: Request, _context: Context) => {
         isPlaying: false,
         lastTrack: lastItem?.track,
         lastArtist: lastItem?.artist,
+        albumArt: lastItem?.albumArt ?? null,
         recentTracks,
       }),
       { headers }

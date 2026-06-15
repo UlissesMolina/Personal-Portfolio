@@ -40,7 +40,7 @@ export default function Nav() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-ctp-base/90 backdrop-blur-md" style={{ borderBottom: '1px solid var(--border-color)' }}>
+    <header className="nav-header sticky top-0 z-40 bg-ctp-base/90 backdrop-blur-md">
       <div className="mx-auto max-w-content w-full flex items-center justify-between px-8 py-4">
         <Link
           to="/"

@@ -123,10 +123,17 @@ export function toggleLightDark() {
 // ─── now playing ─────────────────────────────────────────────────────────────
 
 const LAST_TRACK_KEY = 'spotify_last_track';
-const PAST_ARTS_KEY = 'spotify_past_arts';
-const MAX_PAST_ARTS = 4;
+const RECENT_TRACKS_KEY = 'spotify_recent_tracks';
+const MAX_RECENT = 3;
 
-function loadLastTrack(): { track: string; artist: string } | null {
+interface SavedTrack {
+  track: string;
+  artist: string;
+  albumArt?: string;
+  spotifyUrl?: string;
+}
+
+function loadLastTrack(): SavedTrack | null {
   try {
     const raw = localStorage.getItem(LAST_TRACK_KEY);
     return raw ? JSON.parse(raw) : null;
@@ -135,23 +142,32 @@ function loadLastTrack(): { track: string; artist: string } | null {
   }
 }
 
-function saveLastTrack(track: string, artist: string) {
-  localStorage.setItem(LAST_TRACK_KEY, JSON.stringify({ track, artist }));
-}
-
-function loadPastArts(): string[] {
+function loadRecentTracks(): SavedTrack[] {
   try {
-    const raw = localStorage.getItem(PAST_ARTS_KEY);
+    const raw = localStorage.getItem(RECENT_TRACKS_KEY);
     return raw ? JSON.parse(raw) : [];
   } catch {
     return [];
   }
 }
 
-function savePastArt(artUrl: string) {
-  const arts = loadPastArts().filter((a) => a !== artUrl);
-  arts.unshift(artUrl);
-  localStorage.setItem(PAST_ARTS_KEY, JSON.stringify(arts.slice(0, MAX_PAST_ARTS)));
+/** Save the current track. If the track changed, push the old one into the recent list. */
+function saveCurrentTrack(current: SavedTrack) {
+  const prev = loadLastTrack();
+
+  // if the track actually changed, push the previous one into the recent list
+  if (prev && prev.track !== current.track) {
+    const recents = loadRecentTracks().filter(
+      (r) => r.track !== prev.track
+    );
+    recents.unshift(prev);
+    localStorage.setItem(
+      RECENT_TRACKS_KEY,
+      JSON.stringify(recents.slice(0, MAX_RECENT))
+    );
+  }
+
+  localStorage.setItem(LAST_TRACK_KEY, JSON.stringify(current));
 }
 
 function formatMs(ms: number): string {
@@ -163,6 +179,7 @@ function formatMs(ms: number): string {
 
 export function NowPlayingWidget() {
   const [data, setData] = useState<SpotifyData | null>(null);
+  const [localRecents, setLocalRecents] = useState<SavedTrack[]>(loadRecentTracks);
   const [progress, setProgress] = useState(0);
   const [elapsedMs, setElapsedMs] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval>>();
@@ -170,26 +187,32 @@ export function NowPlayingWidget() {
   useEffect(() => {
     const fetchNowPlaying = async () => {
       try {
-        const res = await fetch(SPOTIFY_ENDPOINT);
+        const res = await fetch(SPOTIFY_ENDPOINT, { cache: 'no-store' });
         if (res.ok) {
           const json: SpotifyData = await res.json();
 
           if (json.isPlaying && json.track && json.artist) {
-            saveLastTrack(json.track, json.artist);
-            if (json.albumArt) savePastArt(json.albumArt);
-          } else if (json.lastTrack && json.lastArtist) {
-            saveLastTrack(json.lastTrack, json.lastArtist);
-          }
-
-          if (!json.isPlaying && !json.lastTrack) {
+            saveCurrentTrack({
+              track: json.track,
+              artist: json.artist,
+              albumArt: json.albumArt,
+              spotifyUrl: json.spotifyUrl,
+            });
+          } else if (!json.isPlaying) {
+            // fill in from localStorage when not playing
             const saved = loadLastTrack();
             if (saved) {
-              json.lastTrack = saved.track;
-              json.lastArtist = saved.artist;
+              if (!json.lastTrack) json.lastTrack = saved.track;
+              if (!json.lastArtist) json.lastArtist = saved.artist;
+              if (!json.albumArt) json.albumArt = saved.albumArt;
+              if (!json.spotifyUrl) json.spotifyUrl = saved.spotifyUrl;
             }
           }
 
+          // always refresh local recents from localStorage (saveCurrentTrack may have updated it)
+          setLocalRecents(loadRecentTracks());
           setData(json);
+
           if (json.isPlaying && json.progressMs && json.durationMs) {
             setProgress((json.progressMs / json.durationMs) * 100);
             setElapsedMs(json.progressMs);
@@ -200,7 +223,10 @@ export function NowPlayingWidget() {
             isPlaying: false,
             lastTrack: saved?.track,
             lastArtist: saved?.artist,
+            albumArt: saved?.albumArt,
+            spotifyUrl: saved?.spotifyUrl,
           });
+          setLocalRecents(loadRecentTracks());
         }
       } catch {
         const saved = loadLastTrack();
@@ -208,7 +234,10 @@ export function NowPlayingWidget() {
           isPlaying: false,
           lastTrack: saved?.track,
           lastArtist: saved?.artist,
+          albumArt: saved?.albumArt,
+          spotifyUrl: saved?.spotifyUrl,
         });
+        setLocalRecents(loadRecentTracks());
       }
     };
 
@@ -235,67 +264,61 @@ export function NowPlayingWidget() {
   const isPlaying = data?.isPlaying && data.track;
   const hasLastTrack = data && !data.isPlaying && data.lastTrack;
 
-  const recentTracks = data?.recentTracks ?? [];
+  // Determine the display track info (current or last played)
+  const displayTrack = isPlaying ? data.track : data?.lastTrack;
+  const displayArtist = isPlaying ? data.artist : data?.lastArtist;
+  const displayAlbumArt = data?.albumArt;
+  const displaySpotifyUrl = data?.spotifyUrl;
+  const showFullLayout = displayTrack && displayAlbumArt;
 
-  // get album arts from recent tracks for the stack effect
-  // falls back to locally stored past album arts when API returns empty
-  let stackArts = recentTracks
-    .filter((t) => t.albumArt && t.albumArt !== data?.albumArt)
-    .slice(0, 2)
-    .map((t) => t.albumArt!);
-
-  if (stackArts.length === 0 && data?.albumArt) {
-    stackArts = loadPastArts()
-      .filter((a) => a !== data.albumArt)
-      .slice(0, 2);
-  }
+  // hover stack: use locally tracked recent songs (excludes the current/displayed art)
+  const stackArts = localRecents
+    .map((r) => r.albumArt)
+    .filter((a): a is string => !!a && a !== displayAlbumArt)
+    .slice(0, 2);
 
   const [hovered, setHovered] = useState(false);
 
   return (
     <div className="py-1 overflow-visible">
-      {isPlaying ? (
+      {showFullLayout ? (
         <div className="grid grid-cols-[150px_1fr] gap-6 max-sm:grid-cols-1 overflow-visible">
           {/* Album art stack */}
-          {data.albumArt ? (
-            <div
-              className="relative w-[150px] h-[150px] shrink-0 max-sm:w-full max-sm:h-auto max-sm:aspect-square overflow-visible"
-              onMouseEnter={() => setHovered(true)}
-              onMouseLeave={() => setHovered(false)}
-            >
-              {/* past album covers behind */}
-              {stackArts.map((art, i) => (
-                <img
-                  key={art}
-                  src={art}
-                  alt="recent album"
-                  className="absolute inset-0 w-full h-full rounded-lg object-cover pointer-events-none"
-                  style={{
-                    transform: hovered
-                      ? `rotate(${(i + 1) * -12}deg) translate(${(i + 1) * -42}px, ${(i + 1) * 14}px) scale(${1 - (i + 1) * 0.04})`
-                      : 'rotate(0deg) translate(0, 0) scale(1)',
-                    opacity: hovered ? 0.95 - i * 0.10 : 0,
-                    transition: `transform ${280 + i * 60}ms cubic-bezier(0.16, 1, 0.3, 1), opacity ${220 + i * 40}ms ease`,
-                    zIndex: 1 + (stackArts.length - i),
-                  }}
-                />
-              ))}
-              {/* current album */}
+          <div
+            className="relative w-[150px] h-[150px] shrink-0 max-sm:w-full max-sm:h-auto max-sm:aspect-square overflow-visible"
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+          >
+            {/* past album covers behind */}
+            {stackArts.map((art, i) => (
               <img
-                src={data.albumArt}
-                alt={`${data.track} album art`}
-                className="relative w-full h-full rounded-lg object-cover"
+                key={art}
+                src={art}
+                alt="recent album"
+                className="absolute inset-0 w-full h-full rounded-lg object-cover pointer-events-none"
                 style={{
-                  zIndex: stackArts.length + 2,
-                  transition: 'transform 280ms cubic-bezier(0.16, 1, 0.3, 1), filter 280ms ease',
-                  transform: hovered ? (stackArts.length > 0 ? 'rotate(2deg) translateY(-2px)' : 'scale(1.03)') : 'none',
-                  filter: hovered ? 'brightness(1.08)' : 'brightness(1)',
+                  transform: hovered
+                    ? `rotate(${(i + 1) * -12}deg) translate(${(i + 1) * -42}px, ${(i + 1) * 14}px) scale(${1 - (i + 1) * 0.04})`
+                    : 'rotate(0deg) translate(0, 0) scale(1)',
+                  opacity: hovered ? 0.95 - i * 0.10 : 0,
+                  transition: `transform ${280 + i * 60}ms cubic-bezier(0.16, 1, 0.3, 1), opacity ${220 + i * 40}ms ease`,
+                  zIndex: 1 + (stackArts.length - i),
                 }}
               />
-            </div>
-          ) : (
-            <div className={`vinyl-record vinyl-spinning shrink-0`} style={{ width: 150, height: 150 }} />
-          )}
+            ))}
+            {/* current/last album */}
+            <img
+              src={displayAlbumArt}
+              alt={`${displayTrack} album art`}
+              className="relative w-full h-full rounded-lg object-cover"
+              style={{
+                zIndex: stackArts.length + 2,
+                transition: 'transform 280ms cubic-bezier(0.16, 1, 0.3, 1), filter 280ms ease',
+                transform: hovered ? (stackArts.length > 0 ? 'rotate(2deg) translateY(-2px)' : 'scale(1.03)') : 'none',
+                filter: hovered ? 'brightness(1.08)' : 'brightness(1)',
+              }}
+            />
+          </div>
 
           {/* Track info */}
           <div className="flex flex-col flex-1 min-w-0 justify-center">
@@ -303,35 +326,39 @@ export function NowPlayingWidget() {
               <div className={`eq-bars ${isPlaying ? '' : 'eq-bars-stopped'}`}>
                 <div className="eq-bar" /><div className="eq-bar" /><div className="eq-bar" /><div className="eq-bar" />
               </div>
-              <span className="text-[11px] text-ctp-overlay0">now playing</span>
+              <span className="text-[11px] text-ctp-overlay0">{isPlaying ? 'now playing' : 'last played'}</span>
             </div>
 
-            {data.spotifyUrl ? (
-              <a href={data.spotifyUrl} target="_blank" rel="noopener noreferrer" className="text-base font-medium text-ctp-text truncate mb-1 hover:text-ctp-accent transition-colors no-underline">{data.track}</a>
+            {displaySpotifyUrl ? (
+              <a href={displaySpotifyUrl} target="_blank" rel="noopener noreferrer" className="text-base font-medium text-ctp-text truncate mb-1 hover:text-ctp-accent transition-colors no-underline">{displayTrack}</a>
             ) : (
-              <p className="text-base font-medium text-ctp-text truncate mb-1">{data.track}</p>
+              <p className="text-base font-medium text-ctp-text truncate mb-1">{displayTrack}</p>
             )}
-            <p className="text-sm text-ctp-subtext0 truncate mb-3">{data.artist}</p>
+            <p className="text-sm text-ctp-subtext0 truncate mb-3">{displayArtist}</p>
 
-            <div className="h-1 rounded-full bg-ctp-surface0 overflow-hidden">
-              <div
-                className="h-full bg-ctp-accent rounded-full transition-[width] duration-1000 ease-linear"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-            {data.durationMs && (
-              <div className="flex justify-between mt-1.5">
-                <span className="text-[10px] text-ctp-subtext0">{formatMs(elapsedMs)}</span>
-                <span className="text-[10px] text-ctp-subtext0">{formatMs(data.durationMs)}</span>
-              </div>
+            {isPlaying && (
+              <>
+                <div className="h-1 rounded-full bg-ctp-surface0 overflow-hidden">
+                  <div
+                    className="h-full bg-ctp-accent rounded-full transition-[width] duration-1000 ease-linear"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+                {data.durationMs && (
+                  <div className="flex justify-between mt-1.5">
+                    <span className="text-[10px] text-ctp-subtext0">{formatMs(elapsedMs)}</span>
+                    <span className="text-[10px] text-ctp-subtext0">{formatMs(data.durationMs)}</span>
+                  </div>
+                )}
+              </>
             )}
 
             {/* recently played */}
-            {recentTracks.length > 0 && (
-              <div className="mt-3 pt-3 border-t border-ctp-surface0/50">
+            {localRecents.length > 0 && (
+              <div className={`${isPlaying ? 'mt-3' : 'mt-1'} pt-3 border-t border-ctp-surface0/50`}>
                 <p className="text-[10px] text-ctp-overlay0 mb-1.5">recently played</p>
                 <div className="space-y-1">
-                  {recentTracks.map((t, i) => (
+                  {localRecents.map((t, i) => (
                     <div key={i} className="flex items-center gap-1.5 text-[11px]">
                       <span className="text-ctp-overlay0">♪</span>
                       <span className="text-ctp-subtext0 truncate">{t.track}</span>
@@ -500,8 +527,8 @@ export function LatestUploadWidget() {
       href={latest.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="widget h-full grid grid-cols-[240px_1fr] gap-5 items-center no-underline group max-sm:grid-cols-1 p-[14px]"
-         >
+      className="grid grid-cols-[240px_1fr] gap-5 items-center no-underline group max-sm:grid-cols-1"
+    >
       {/* thumbnail */}
       <div className="video-thumbnail relative w-full aspect-video rounded-md overflow-hidden bg-ctp-surface0/30 shrink-0">
         <img
@@ -523,7 +550,7 @@ export function LatestUploadWidget() {
       <div className="flex flex-col min-w-0 flex-1">
         <div className="flex items-center gap-1.5 mb-2">
           <svg className="w-3.5 h-3.5 text-ctp-accent shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-            <path d="m22 8-6 4 6 4V8Z" /><rect width="14" height="12" x="2" y="6" rx="2" ry="2" />
+            <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="15" y2="18" />
           </svg>
           <span className="text-[11px] text-ctp-overlay0">latest upload</span>
         </div>
