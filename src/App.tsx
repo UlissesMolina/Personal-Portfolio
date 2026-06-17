@@ -14,6 +14,26 @@ function ScrollToTop() {
   return null;
 }
 
+function AnimateLines() {
+  useEffect(() => {
+    const strips = document.querySelectorAll<HTMLElement>('.section-strip');
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            (e.target as HTMLElement).classList.add('lines-visible');
+            obs.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.05 }
+    );
+    strips.forEach((s) => obs.observe(s));
+    return () => obs.disconnect();
+  }, []);
+  return null;
+}
+
 export default function App() {
   useEffect(() => {
     initTheme();
@@ -22,6 +42,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <AnimateLines />
       <div className="min-h-screen bg-ctp-base text-ctp-text font-mono">
         <Nav />
         <div className="page-wrapper min-h-[calc(100vh-57px)]">

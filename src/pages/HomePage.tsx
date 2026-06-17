@@ -25,13 +25,26 @@ const scrollReveal = {
 };
 
 function SectionHeader({ title, right }: { title: string; right?: React.ReactNode }) {
+  const lineRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = lineRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { el.classList.add('visible'); obs.disconnect(); } },
+      { threshold: 0.1 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   return (
     <div className="flex items-center gap-4 mb-5">
       <h2 className="text-[13px] font-medium tracking-[0.08em] shrink-0">
         <span className="text-ctp-overlay0">//</span>{' '}
         <span className="text-ctp-subtext1">{title}</span>
       </h2>
-      <div className="divider-line" />
+      <div ref={lineRef} className="divider-line" />
       {right}
     </div>
   );
@@ -90,14 +103,11 @@ export default function HomePage() {
           </svg>
           <span>Auburn, AL</span>
         </motion.p>
-        <motion.h1 variants={fadeUp} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="text-[44px] leading-none font-medium text-ctp-text mb-5 tracking-[-0.04em] group/name">
+        <motion.h1 variants={fadeUp} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="text-[44px] leading-none font-medium text-ctp-text mb-5 tracking-[-0.04em]">
           {'ulisses molina'.split('').map((char, i) => (
             <span
               key={i}
-              className="inline-block transition-transform duration-200 ease-out group-hover/name:[animation-play-state:running]"
-              style={{
-                animation: `letter-wave 0.35s ease-out ${i * 0.03}s both paused`,
-              }}
+              className="name-letter"
             >
               {char === ' ' ? '\u00A0' : char}
             </span>

@@ -333,7 +333,7 @@
 /* ── nav header — full-width bottom border ── */
 .nav-header {
   position: relative;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid transparent;
 }
 
 .nav-header::after {
@@ -343,9 +343,15 @@
   left: 50%;
   width: 100vw;
   height: 1px;
-  transform: translateX(-50%);
   background: var(--border-color);
   pointer-events: none;
+  transform-origin: left;
+  animation: nav-line-reveal 1.4s cubic-bezier(0.25, 0.1, 0.25, 1) 0.2s both;
+}
+
+@keyframes nav-line-reveal {
+  from { transform: translateX(-50%) scaleX(0); }
+  to   { transform: translateX(-50%) scaleX(1); }
 }
 
 /* ── page wrapper ── */
@@ -353,20 +359,41 @@
   position: relative;
   max-width: 1040px;
   margin: 0 auto;
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+  background: rgb(var(--ctp-base) / 0.95);
+}
+
+/* vertical side lines — grow downward on load */
+.page-wrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -1px;
+  right: -1px;
+  bottom: 0;
   border-left: 1px solid var(--border-color);
   border-right: 1px solid var(--border-color);
-  background: rgb(var(--ctp-base) / 0.95);
+  pointer-events: none;
+  transform-origin: top;
+  animation: line-reveal-y 1.8s cubic-bezier(0.25, 0.1, 0.25, 1) 0.3s both;
+}
+
+@keyframes line-reveal-y {
+  from { clip-path: inset(0 0 100% 0); }
+  to   { clip-path: inset(0 0 0% 0); }
 }
 
 @media (max-width: 1100px) {
   .page-wrapper { border-left: none; border-right: none; }
+  .page-wrapper::after { display: none; }
 }
 
 /* ── section strip ── */
 .section-strip {
   position: relative;
   padding: 36px 32px;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid transparent;
 }
 
 .section-strip::before {
@@ -376,9 +403,21 @@
   left: 50%;
   width: 100vw;
   height: 1px;
-  transform: translateX(-50%);
   background: var(--border-color);
   pointer-events: none;
+  transform-origin: left;
+  transform: translateX(-50%) scaleX(0);
+  animation: line-reveal-x 1.2s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+  animation-play-state: paused;
+}
+
+.section-strip.lines-visible::before {
+  animation-play-state: running;
+}
+
+@keyframes line-reveal-x {
+  from { transform: translateX(-50%) scaleX(0); }
+  to   { transform: translateX(-50%) scaleX(1); }
 }
 
 @media (max-width: 719px) {
@@ -391,10 +430,15 @@
   height: 0.5px;
   background: var(--border-color);
   transform-origin: left;
-  transition: transform 240ms ease, opacity 240ms ease;
+  transform: scaleX(0);
+  transition: transform 1s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
-.section-strip:hover .divider-line {
+.divider-line.visible {
+  transform: scaleX(1);
+}
+
+.section-strip:hover .divider-line.visible {
   transform: scaleX(1.04);
 }
 
@@ -458,15 +502,16 @@
 
 /* animations now handled by framer motion */
 
-/* ── letter wave on name hover ── */
-@keyframes letter-wave {
-  0%   { transform: translateY(0); }
-  50%  { transform: translateY(-6px); }
-  100% { transform: translateY(0); }
+/* ── individual letter hover on name ── */
+.name-letter {
+  display: inline-block;
+  transition: transform 0.2s ease-out, color 0.2s ease-out;
+  cursor: default;
 }
 
-.group\/name:hover span {
-  animation-play-state: running !important;
+.name-letter:hover {
+  transform: translateY(-6px);
+  color: rgb(var(--ctp-accent));
 }
 
 /* ── vinyl record ── */
