@@ -27,8 +27,9 @@ dist-ssr
 *.sln
 *.sw?
 
-# Local Netlify folder
+# Netlify
 .netlify
+netlify/functions
 
 # Docs
 docs/superpowers
