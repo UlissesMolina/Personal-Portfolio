@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { experiences, featuredProjects, EMAIL, GITHUB_USERNAME, YOUTUBE_CHANNEL } from '../data';
@@ -40,9 +40,8 @@ function SectionHeader({ title, right }: { title: string; right?: React.ReactNod
 
   return (
     <div className="flex items-center gap-4 mb-5">
-      <h2 className="text-[13px] font-medium tracking-[0.08em] shrink-0">
-        <span className="text-ctp-overlay0">//</span>{' '}
-        <span className="text-ctp-subtext1">{title}</span>
+      <h2 className="text-[13px] font-medium tracking-[0.08em] shrink-0 text-ctp-subtext1">
+        {title}
       </h2>
       <div ref={lineRef} className="divider-line" />
       {right}
@@ -70,21 +69,6 @@ function FooterClock() {
 }
 
 export default function HomePage() {
-  const [toast, setToast] = useState('');
-  const toastTimer = useRef<ReturnType<typeof setTimeout>>();
-
-  const showToast = useCallback((msg: string) => {
-    setToast(msg);
-    if (toastTimer.current) clearTimeout(toastTimer.current);
-    toastTimer.current = setTimeout(() => setToast(''), 2200);
-  }, []);
-
-  const copyEmail = () => {
-    navigator.clipboard.writeText(EMAIL).then(() => {
-      showToast('email copied');
-    });
-  };
-
   return (
     <>
       {/* ── Hero strip ── */}
@@ -94,8 +78,7 @@ export default function HomePage() {
         animate="visible"
         variants={stagger}
       >
-        <motion.p variants={fadeUp} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="text-[11px] tracking-[0.2em] text-ctp-overlay0 mb-4 flex items-center gap-1.5">
-          <span className="text-ctp-surface2">//</span>
+        <motion.p variants={fadeUp} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="text-[11px] tracking-[0.2em] text-ctp-subtext0 mb-4 flex items-center gap-1.5">
           <span>software engineer · auburn university</span>
           <span className="text-ctp-surface2">·</span>
           <svg className="w-3 h-3 text-ctp-overlay0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
@@ -125,7 +108,7 @@ export default function HomePage() {
           <span className="text-ctp-surface1">·</span>
           <a href={YOUTUBE_CHANNEL} target="_blank" rel="noopener noreferrer" className="link-underline hover:text-ctp-text transition-colors">youtube</a>
           <span className="text-ctp-surface1">·</span>
-          <button type="button" onClick={copyEmail} className="link-underline hover:text-ctp-text transition-colors">email</button>
+          <a href={`mailto:${EMAIL}`} className="link-underline hover:text-ctp-text transition-colors">email</a>
           <span className="text-ctp-surface1">·</span>
           <a href="/uliResume.pdf" target="_blank" rel="noopener noreferrer" className="link-underline hover:text-ctp-text transition-colors">resume</a>
         </motion.div>
@@ -261,13 +244,12 @@ export default function HomePage() {
             <p className="text-lg font-medium text-ctp-text mb-2">
               get in touch
             </p>
-            <button
-              type="button"
-              onClick={copyEmail}
+            <a
+              href={`mailto:${EMAIL}`}
               className="text-sm text-ctp-accent hover:text-ctp-accent/80 transition-colors"
             >
               {EMAIL}
-            </button>
+            </a>
           </div>
           <div className="flex items-center gap-5 text-xs text-ctp-subtext0">
             <a href="https://github.com/UlissesMolina" target="_blank" rel="noopener noreferrer" className="link-underline hover:text-ctp-text transition-colors">
@@ -291,10 +273,6 @@ export default function HomePage() {
         </div>
       </motion.footer>
 
-      {/* toast */}
-      <div className={`fixed bottom-6 right-6 z-50 bg-ctp-mantle border border-ctp-surface0 text-ctp-text text-xs px-3 py-2 rounded-lg pointer-events-none transition-all duration-200 ${toast ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-        {toast || '\u00A0'}
-      </div>
     </>
   );
 }

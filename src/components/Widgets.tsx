@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
-import { SPOTIFY_ENDPOINT, GITHUB_USERNAME, YOUTUBE_CHANNEL, videos } from '../data';
+import { SPOTIFY_ENDPOINT, GITHUB_USERNAME, videos } from '../data';
 
 // ─── types ───────────────────────────────────────────────────────────────────
 
@@ -49,7 +49,7 @@ function timeAgo(dateStr: string): string {
 
 const THEME_KEY = 'ctp-theme';
 
-type PresetId = 'mono' | 'light' | 'mocha' | 'tokyo-night' | 'rose-pine' | 'gruvbox' | 'nord';
+type PresetId = 'mono' | 'light';
 
 interface Preset {
   id: PresetId;
@@ -58,13 +58,8 @@ interface Preset {
 }
 
 const PRESETS: Preset[] = [
-  { id: 'mono',        accent: '130 180 255', isDark: true },
-  { id: 'light',       accent: '50 90 160',   isDark: false },
-  { id: 'mocha',       accent: '203 166 247', isDark: true },
-  { id: 'tokyo-night', accent: '187 154 247', isDark: true },
-  { id: 'rose-pine',   accent: '196 167 231', isDark: true },
-  { id: 'gruvbox',     accent: '254 128 25',  isDark: true },
-  { id: 'nord',        accent: '136 192 208', isDark: true },
+  { id: 'mono',  accent: '130 180 255', isDark: true },
+  { id: 'light', accent: '50 90 160',   isDark: false },
 ];
 
 const PRESET_IDS = new Set(PRESETS.map(p => p.id));
@@ -386,132 +381,6 @@ export function NowPlayingWidget() {
           <p className="text-[11px] text-ctp-overlay0 italic">silence.</p>
         </div>
       )}
-    </div>
-  );
-}
-
-// ─── this week ──────────────────────────────────────────────────────────────
-
-interface PrData {
-  title: string;
-  repo: string;
-  url: string;
-  state: string;
-  draft: boolean;
-  createdAt: string;
-}
-
-export function ThisWeekWidget() {
-  const [prs, setPrs] = useState<PrData[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchPRs = async () => {
-      try {
-        const res = await fetch(
-          `https://api.github.com/search/issues?q=author:${GITHUB_USERNAME}+type:pr+is:open&sort=created&order=desc&per_page=4`
-        );
-        if (!res.ok) { setLoading(false); return; }
-        const json = await res.json();
-        const items: PrData[] = (json.items || []).map((item: { title: string; html_url: string; pull_request?: { url: string }; draft?: boolean; created_at: string; repository_url: string; state: string }) => ({
-          title: item.title,
-          repo: item.repository_url.split('/').pop() || '',
-          url: item.html_url,
-          state: item.state,
-          draft: item.draft || false,
-          createdAt: item.created_at,
-        }));
-        setPrs(items);
-      } catch { /* noop */ }
-      setLoading(false);
-    };
-    fetchPRs();
-  }, []);
-
-  return (
-    <div className="widget">
-      <div className="flex items-center gap-1.5 mb-3">
-        <svg className="w-3.5 h-3.5 text-ctp-accent shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/>
-          <path d="M13 6h3a2 2 0 0 1 2 2v7"/><path d="M6 9v12"/>
-        </svg>
-        <span className="text-[11px] text-ctp-overlay0">open prs</span>
-      </div>
-
-      {loading ? (
-        <div className="space-y-2">
-          {[0, 1].map((i) => (
-            <div key={i} className="h-[22px] rounded bg-ctp-surface0/30 animate-pulse" />
-          ))}
-        </div>
-      ) : prs.length === 0 ? (
-        <p className="text-[11px] text-ctp-overlay0 italic">no open prs right now</p>
-      ) : (
-        <ul className="space-y-2">
-          {prs.map((pr, i) => (
-            <li key={i}>
-              <a
-                href={pr.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-start gap-2 text-[11px] leading-relaxed group"
-              >
-                <span className={`mt-[2px] shrink-0 ${pr.draft ? 'text-ctp-overlay0' : 'text-ctp-green'}`}>
-                  {pr.draft ? '○' : '●'}
-                </span>
-                <span className="flex flex-col min-w-0">
-                  <span className="text-ctp-subtext0 truncate group-hover:text-ctp-text transition-colors">{pr.title}</span>
-                  <span className="text-[10px] text-ctp-overlay0">{pr.repo} · {timeAgo(pr.createdAt)}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-}
-
-// ─── location ───────────────────────────────────────────────────────────────
-
-
-export function LocationWidget() {
-  const [time, setTime] = useState(() =>
-    new Date().toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true,
-      timeZone: 'America/Chicago',
-    }).toLowerCase()
-  );
-
-  useEffect(() => {
-    const t = setInterval(() => {
-      setTime(
-        new Date().toLocaleTimeString('en-US', {
-          hour: 'numeric',
-          minute: '2-digit',
-          hour12: true,
-          timeZone: 'America/Chicago',
-        }).toLowerCase()
-      );
-    }, 60000);
-    return () => clearInterval(t);
-  }, []);
-
-  return (
-    <div className="status-row">
-      <span className="status-label">status</span>
-      <div className="flex items-center gap-3 text-xs">
-        <span className="text-ctp-text">Auburn, AL</span>
-        <span className="text-ctp-overlay0">·</span>
-        <span className="text-ctp-subtext0">{time} CST</span>
-        <span className="text-ctp-overlay0">·</span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-ctp-green shrink-0 animate-pulse" />
-          <span className="text-[11px] text-ctp-green">open to work</span>
-        </span>
-      </div>
     </div>
   );
 }
