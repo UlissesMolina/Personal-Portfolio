@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { experiences, featuredProjects, EMAIL, GITHUB_USERNAME, YOUTUBE_CHANNEL } from '../data';
@@ -49,24 +49,6 @@ function SectionHeader({ title, right }: { title: string; right?: React.ReactNod
   );
 }
 
-function FooterClock() {
-  const fmt = () =>
-    new Date().toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-      timeZone: 'America/Chicago',
-    });
-
-  const [time, setTime] = useState(fmt);
-
-  useEffect(() => {
-    const t = setInterval(() => setTime(fmt()), 60000);
-    return () => clearInterval(t);
-  }, []);
-
-  return <span>{time} CST</span>;
-}
 
 export default function HomePage() {
   return (
@@ -269,7 +251,6 @@ export default function HomePage() {
 
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[10px] text-ctp-subtext0 border-t border-ctp-surface0/30 pt-4">
           <span>© 2026 Ulisses Molina</span>
-          <FooterClock />
         </div>
       </motion.footer>
 

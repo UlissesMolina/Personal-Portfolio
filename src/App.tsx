@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Nav from './components/Nav';
 import HomePage from './pages/HomePage';
-import BlogPage from './pages/BlogPage';
 import ProjectsPage from './pages/ProjectsPage';
 import { initTheme } from './components/Widgets';
 
@@ -49,7 +48,6 @@ export default function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/projects" element={<ProjectsPage />} />
-            <Route path="/blog" element={<BlogPage />} />
           </Routes>
         </div>
       </div>

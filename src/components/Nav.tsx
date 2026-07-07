@@ -28,12 +28,7 @@ export default function Nav() {
       action: () => navigate('/projects'),
       active: location.pathname === '/projects',
     },
-    {
-      label: 'blog',
-      action: () => navigate('/blog'),
-      active: location.pathname === '/blog',
-    },
-    {
+{
       label: 'resume',
       action: () => window.open('/uliResume.pdf', '_blank'),
     },
