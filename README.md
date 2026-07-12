@@ -2,6 +2,8 @@
 
 My personal portfolio built with React, TypeScript, and Vite. Pretty cool bento grid 
 
+<img width="1919" height="896" alt="image" src="https://github.com/user-attachments/assets/cfa0e216-48ff-4eb7-8bba-a0446bff886e" />
+
 ## Run locally
 
 ```bash
@@ -22,6 +24,7 @@ npm run preview
 - Tailwind CSS 3 (Catppuccin palette)
 - React Router
 - JetBrains Mono via `@fontsource`
+
 
 ## Project structure
 
