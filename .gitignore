@@ -29,7 +29,6 @@ dist-ssr
 
 # Netlify
 .netlify
-netlify/functions
 
 # Docs
 docs/superpowers

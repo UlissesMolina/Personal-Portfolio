@@ -41,10 +41,7 @@ export default function Nav() {
           to="/"
           className="group/logo relative text-sm font-medium text-ctp-text tracking-tight hover:text-ctp-accent transition-colors"
         >
-          umolina.dev
-          <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-full mt-2 whitespace-nowrap rounded-md bg-ctp-surface0 border border-ctp-surface1/60 px-2.5 py-1.5 text-[10px] text-ctp-subtext0 shadow-lg opacity-0 scale-95 transition-all duration-200 group-hover/logo:opacity-100 group-hover/logo:scale-100">
-            buying the domain soon...
-          </span>
+          umolina.com
         </Link>
 
         {/* desktop nav */}
