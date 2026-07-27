@@ -602,6 +602,97 @@
   width: 3px;
 }
 
+/* ── projects grid (Level 1: /projects) ── */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px 28px;
+}
+
+@media (max-width: 600px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+.project-card-img {
+  aspect-ratio: 16 / 10;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #121212;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="light"] .project-card-img {
+  background: #e0e0de;
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+/* ── case study page (Level 2: /projects/:slug) ── */
+.case-study-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 72px;
+}
+
+.case-study-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.case-study-next {
+  margin-top: 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/* ── video container — framed device presentation ── */
+.video-container {
+  border-radius: 12px;
+  overflow: hidden;
+  background: #121212;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  padding: 6px;
+}
+
+[data-theme="light"] .video-container {
+  background: #e0e0de;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.video-container video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* ── detail page links — minimal text with arrow ── */
+.detail-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  transition: opacity 200ms ease;
+}
+
+.detail-link--primary {
+  color: rgb(var(--ctp-text));
+}
+
+.detail-link--secondary {
+  color: rgb(var(--ctp-overlay0));
+}
+
+.detail-link:hover {
+  opacity: 0.7;
+}
+
 /* ── animated underline — slide left-to-right ── */
 .link-underline {
   position: relative;

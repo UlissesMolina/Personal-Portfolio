@@ -1,105 +1,67 @@
+import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { projects } from '../data';
-import TagList from '../components/TagList';
 import type { Project } from '../data';
 
-const scrollReveal = {
-  hidden: { opacity: 0, y: 24 },
+const cardReveal = {
+  hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
   },
 };
 
-function ProjectRow({ project }: { project: Project }) {
-  const statusColor =
-    project.status === 'live' ? 'bg-ctp-green' : 'bg-ctp-mauve';
-
+function ProjectCard({ project, index }: { project: Project; index: number }) {
   return (
-    <article className="project-card flex gap-0 border border-ctp-surface0/50 rounded-lg overflow-hidden">
-      {/* status accent bar */}
-      <div className={`accent-bar w-[3px] shrink-0 ${statusColor} opacity-40`} />
-
-      <div className="flex-1 px-5 py-4">
-        {/* top row: title + status + year */}
-        <div className="flex items-center gap-3 mb-2">
-          <h2 className="text-sm font-medium text-ctp-text">{project.title}</h2>
-          <span className="text-[10px] text-ctp-overlay0 ml-auto">{project.year}</span>
+    <motion.div
+      variants={cardReveal}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ delay: index % 2 === 1 ? 0.12 : 0 }}
+    >
+      <Link to={`/projects/${project.slug}`} className="group block">
+        <div className="project-card-img">
+          <img
+            src={project.image}
+            alt={project.title}
+            className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+          />
         </div>
 
-        {/* description */}
-        <p className="text-xs text-ctp-subtext0 leading-relaxed mb-3 max-w-[65ch]">
-          {project.description}
-        </p>
-
-        {/* bottom row: tags + links */}
-        <div className="flex items-center justify-between gap-4">
-          <TagList tags={project.tags} />
-          <div className="flex items-center gap-4 text-[11px] shrink-0">
-            {project.demoUrl && (
-              <a
-                href={project.demoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-ctp-accent hover:text-ctp-accent/80 transition-colors"
-              >
-                live <span className="arrow-nudge">↗</span>
-              </a>
-            )}
-            <a
-              href={project.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-ctp-overlay0 hover:text-ctp-text transition-colors"
-            >
-              code <span className="arrow-nudge">↗</span>
-            </a>
-          </div>
+        <div className="mt-4">
+          <h2 className="text-sm font-medium text-ctp-text group-hover:text-ctp-accent transition-colors duration-200">
+            {project.title}
+          </h2>
+          <p className="text-[11px] text-ctp-overlay0 mt-1 leading-relaxed">
+            {project.description}
+          </p>
         </div>
-      </div>
-    </article>
+      </Link>
+    </motion.div>
   );
 }
-
-const stagger = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.08 } },
-};
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 16 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
-  },
-};
 
 export default function ProjectsPage() {
   return (
     <div>
-      <motion.section
-        className="section-strip pt-20 pb-16"
-        initial="hidden"
-        animate="visible"
-        variants={stagger}
-      >
-        <motion.div className="flex items-center gap-4 mb-10" variants={fadeUp}>
-          <h1 className="text-xs font-medium text-ctp-overlay0 tracking-widest shrink-0">
-            projects
-          </h1>
-          <div className="divider-line" />
-        </motion.div>
+      <section className="section-strip pt-20 pb-16">
+        <motion.h1
+          className="text-2xl font-medium text-ctp-text mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        >
+          projects
+        </motion.h1>
 
-        <motion.div className="flex flex-col gap-3" variants={stagger}>
-          {projects.map((project) => (
-            <motion.div key={project.slug} variants={fadeUp}>
-              <ProjectRow project={project} />
-            </motion.div>
+        <div className="projects-grid">
+          {projects.map((project, i) => (
+            <ProjectCard key={project.slug} project={project} index={i} />
           ))}
-        </motion.div>
-      </motion.section>
+        </div>
+      </section>
     </div>
   );
 }

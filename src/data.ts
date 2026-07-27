@@ -13,18 +13,28 @@ export interface Experience {
   tags: Tag[];
 }
 
+export interface ProjectSection {
+  title: string;
+  body: string;
+  video?: string;
+}
+
 export interface Project {
   slug: string;
   title: string;
   status: 'live' | 'shipped' | 'archived';
   description: string;
   longDescription: string;
+  highlights: string[];
+  sections: ProjectSection[];
   tags: Tag[];
   image: string;
+  heroVideo?: string;
   githubUrl: string;
   demoUrl: string | null;
   year: string;
   buildTime: string;
+  featured?: boolean;
 }
 
 // ─── constants ───────────────────────────────────────────────────────────────
@@ -125,17 +135,25 @@ export const projects: Project[] = [
     description: 'Job application tracker with a Kanban board, timeline, and GPT-4o cover letter generation.',
     longDescription:
       'Job application tracker with a Kanban board, timeline, and GPT-4o cover letter generation.',
+    highlights: [
+      'Drag-and-drop Kanban board with real-time state persistence',
+      'GPT-4o generates tailored cover letters from job descriptions',
+      'Timeline view tracks application lifecycle from apply → offer',
+    ],
+    sections: [],
     tags: [
       { label: 'react', color: 'blue' },
       { label: 'typescript', color: 'blue' },
       { label: 'node.js', color: 'green' },
       { label: 'openai', color: 'mauve' },
     ],
-    image: '/trackr.png',
+    image: '/thumbnails/trackr_cover.png',
+    heroVideo: '/previews/trackrShowcase-h264.mp4',
     githubUrl: 'https://github.com/UlissesMolina/Trackr',
     demoUrl: 'https://usetrackr.netlify.app/',
     year: '2025',
     buildTime: '2025',
+    featured: true,
   },
   {
     slug: 'tiger-scheduler',
@@ -144,11 +162,17 @@ export const projects: Project[] = [
     description: 'Auto-register tool for Auburn University course scheduling. Automates seat monitoring and registration.',
     longDescription:
       'Auto-register tool for Auburn University course scheduling. Automates seat monitoring and registration.',
+    highlights: [
+      'Selenium bot polls seat availability every 30s across target sections',
+      'Auto-registers the moment a seat opens — zero manual intervention',
+      'Used by Auburn students to beat waitlist bottlenecks',
+    ],
+    sections: [],
     tags: [
       { label: 'python', color: 'green' },
       { label: 'selenium', color: 'teal' },
     ],
-    image: '/auburn.png',
+    image: '/thumbnails/placeholder.svg',
     githubUrl: 'https://github.com/UlissesMolina/Tiger-Scheduler-Course-Auto-Register-Tool',
     demoUrl: null,
     year: '2025',
@@ -161,17 +185,24 @@ export const projects: Project[] = [
     description: 'Full-stack prediction system for the 2026 FIFA World Cup. XGBoost & PyTorch models on 45k+ matches, FastAPI predictions, Monte Carlo simulations.',
     longDescription:
       'Full-stack prediction system for the 2026 FIFA World Cup. Trains XGBoost and PyTorch models on 45,000+ historical international matches, serves live win-probability predictions via FastAPI, and runs Monte Carlo tournament simulations across all 48 teams.',
+    highlights: [
+      'Trained on 45,000+ international matches — XGBoost + PyTorch ensemble',
+      'FastAPI serves live win-probability predictions per matchup',
+      'Monte Carlo simulations model full 48-team tournament brackets',
+    ],
+    sections: [],
     tags: [
       { label: 'python', color: 'green' },
       { label: 'pytorch', color: 'red' },
       { label: 'fastapi', color: 'teal' },
       { label: 'xgboost', color: 'peach' },
     ],
-    image: '/worldcup.png',
+    image: '/thumbnails/placeholder.svg',
     githubUrl: 'https://github.com/UlissesMolina/worldCup',
     demoUrl: null,
     year: '2025',
     buildTime: '2025',
+    featured: true,
   },
   {
     slug: 'expense-flow',
@@ -180,13 +211,19 @@ export const projects: Project[] = [
     description: 'REST API for expense report submissions. JWT auth, role-based access, multi-step approval workflow.',
     longDescription:
       'REST API for expense report submissions. JWT auth, role-based access, multi-step approval workflow.',
+    highlights: [
+      'JWT auth with role-based access control (employee → manager → admin)',
+      'Multi-step approval workflow with audit trail logging',
+      'Dockerized Spring Boot service with PostgreSQL persistence',
+    ],
+    sections: [],
     tags: [
       { label: 'java', color: 'peach' },
       { label: 'spring boot', color: 'green' },
       { label: 'postgresql', color: 'blue' },
       { label: 'docker', color: 'blue' },
     ],
-    image: '/enterprise.png',
+    image: '/thumbnails/placeholder.svg',
     githubUrl: 'https://github.com/UlissesMolina/Enterprise',
     demoUrl: null,
     year: '2026',
@@ -199,12 +236,19 @@ export const projects: Project[] = [
     description: 'Personal finance dashboard. Income, expenses, savings, spending trends.',
     longDescription:
       'Personal finance dashboard. Income, expenses, savings, spending trends.',
+    highlights: [
+      'Interactive charts visualize income, expenses & savings over time',
+      'Category-level spending breakdown with trend analysis',
+      'Responsive dashboard layout built with pure CSS Grid',
+    ],
+    sections: [],
     tags: [
       { label: 'react', color: 'blue' },
       { label: 'typescript', color: 'blue' },
       { label: 'css', color: 'peach' },
     ],
-    image: '/clarity.png',
+    image: '/previews/clarity_finance_cover.png',
+    heroVideo: '/previews/clarityFinance-h264.mp4',
     githubUrl: 'https://github.com/UlissesMolina/FinanceDashBoard',
     demoUrl: 'https://clarityfi.netlify.app/',
     year: '2025',
