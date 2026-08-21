@@ -80,7 +80,7 @@ export default function HomePage() {
           <span className="text-ctp-accent">.</span>
         </motion.h1>
         <motion.p variants={fadeUp} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="text-[15px] text-ctp-subtext1 leading-[1.75] max-w-[620px]">
-          Software engineering intern @ OCV LLC. Studying at Auburn University. Interested in full-stack development or AI development. Feel free to{' '}
+          Student software developer @ Auburn RFID Lab. Studying at Auburn University. Interested in full-stack development or AI development. Feel free to{' '}
           <button type="button" onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })} className="text-ctp-accent hover:text-ctp-accent/80 transition-colors">reach out</button>!
         </motion.p>
         <motion.div variants={fadeUp} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex items-center gap-4 mt-5 text-xs text-ctp-subtext0">

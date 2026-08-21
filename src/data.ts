@@ -100,6 +100,14 @@ export const tagColorMap: Record<TagColor, string> = {
 
 export const experiences: Experience[] = [
   {
+    title: 'student software developer',
+    company: 'Auburn RFID Lab',
+    period: '08.2026 – present',
+    description:
+      '',
+    tags: [],
+  },
+  {
     title: 'software engineering intern',
     company: 'Room2Room Movers',
     period: '01.2026 – 05.2026',
@@ -114,7 +122,7 @@ export const experiences: Experience[] = [
   {
     title: 'software engineering intern',
     company: 'OCV, LLC',
-    period: '09.2025 – present',
+    period: '09.2025 – 08.2026',
     description:
       'Contributed to client-facing business software handling real user data and workflows. Improved reliability through bug fixes, test coverage, and code review.',
     tags: [
