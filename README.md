@@ -1,29 +1,14 @@
 # Personal Portfolio
 
-My personal portfolio built with React, TypeScript, and Vite. 
+My personal portfolio. You can check it out at <a href="https://umolina.com">umolina.com</a>
 
 <img width="1919" height="896" alt="image" src="https://github.com/user-attachments/assets/cfa0e216-48ff-4eb7-8bba-a0446bff886e" />
 
-## Run locally
-
-```bash
-npm install
-npm run dev
-```
-
-## Build
-
-```bash
-npm run build
-npm run preview
-```
 
 ## Tech stack
 
 - React 19, TypeScript, Vite 7
 - Tailwind CSS 3 (Catppuccin palette)
-- React Router
-- JetBrains Mono via `@fontsource`
 
 
 ## Project structure
