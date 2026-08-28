@@ -173,18 +173,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Latest Video strip ── */}
-      <section className="section-strip">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-40px' }}
-          variants={scrollReveal}
-        >
-          <SectionHeader title="latest video" />
-          <LatestUploadWidget />
-        </motion.div>
-      </section>
 
       {/* ── Listening strip ── */}
       <section className="section-strip overflow-visible">
