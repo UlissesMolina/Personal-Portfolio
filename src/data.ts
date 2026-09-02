@@ -105,7 +105,11 @@ export const experiences: Experience[] = [
     period: '08.2026 – present',
     description:
       'Developing and maintainig internal software for RFID research systems',
-    tags: [],
+    tags: [
+      { label: 'Go', color: 'blue' },
+      { label: 'Node.js', color: 'mauve' },
+      { label: 'SQL', color: 'green' },
+    ],
   },
   {
     title: 'software engineering intern',
@@ -114,8 +118,8 @@ export const experiences: Experience[] = [
     description:
       'Built internal dashboards in React used daily by operations staff to manage jobs and scheduling. Designed and shipped UI components focused on speed, clarity, and mobile usability.',
     tags: [
-      { label: 'SQL', color: 'blue' },
-      { label: 'Go', color: 'mauve' },
+      { label: 'React', color: 'blue' },
+      { label: 'Docker', color: 'mauve' },
       { label: 'node.js', color: 'green' },
     ],
   },
