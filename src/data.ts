@@ -104,7 +104,7 @@ export const experiences: Experience[] = [
     company: 'Auburn RFID Lab',
     period: '08.2026 – present',
     description:
-      'Developing and maintainig internal software for RFID research systems',
+      'Developing and maintaining internal software for RFID research systems',
     tags: [
       { label: 'Go', color: 'blue' },
       { label: 'Node.js', color: 'mauve' },
