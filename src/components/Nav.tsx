@@ -2,35 +2,41 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { getThemeState, toggleLightDark } from './Widgets';
 
+const navItem = 'text-xs transition-colors';
+const inactive = 'text-ctp-subtext0 hover:text-ctp-text';
+const active = 'text-ctp-text';
+
 export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isDark, setIsDark] = useState(() => getThemeState().isDark);
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === '/';
+  const onProjects = location.pathname.startsWith('/projects');
 
-  const links: { label: string; action: () => void; active?: boolean }[] = [
-    {
-      label: 'work',
-      action: () => {
-        if (isHome) {
-          document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' });
-        } else {
-          navigate('/');
-          setTimeout(() => document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' }), 100);
-        }
-      },
-    },
-    {
-      label: 'projects',
-      action: () => navigate('/projects'),
-      active: location.pathname.startsWith('/projects'),
-    },
-    {
-      label: 'resume',
-      action: () => window.open('/uliResume.pdf', '_blank'),
-    },
-  ];
+  const goToWork = () => {
+    if (isHome) {
+      document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate('/');
+      setTimeout(() => document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' }), 100);
+    }
+    setMenuOpen(false);
+  };
+
+  const items = (
+    <>
+      <button type="button" onClick={goToWork} className={`${navItem} ${inactive}`}>
+        work
+      </button>
+      <Link to="/projects" onClick={() => setMenuOpen(false)} className={`${navItem} ${onProjects ? active : inactive}`}>
+        projects
+      </Link>
+      <a href="/uliResume.pdf" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)} className={`${navItem} ${inactive}`}>
+        resume
+      </a>
+    </>
+  );
 
   return (
     <header className="nav-header sticky top-0 z-40 bg-ctp-base/90 backdrop-blur-md">
@@ -43,20 +49,7 @@ export default function Nav() {
         </Link>
 
         {/* desktop nav */}
-        <nav className="hidden sm:flex items-center gap-6">
-          {links.map((link) => (
-            <button
-              key={link.label}
-              type="button"
-              onClick={link.action}
-              className={`text-xs transition-colors ${
-                link.active ? 'text-ctp-text' : 'text-ctp-subtext0 hover:text-ctp-text'
-              }`}
-            >
-              {link.label}
-            </button>
-          ))}
-        </nav>
+        <nav className="hidden sm:flex items-center gap-6">{items}</nav>
 
         <div className="flex items-center gap-2">
           {/* light/dark toggle */}
@@ -81,6 +74,8 @@ export default function Nav() {
           <button
             type="button"
             onClick={() => setMenuOpen(!menuOpen)}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-nav"
             className="sm:hidden text-ctp-subtext0 hover:text-ctp-text transition-colors p-1"
             aria-label={menuOpen ? 'close menu' : 'open menu'}
           >
@@ -104,21 +99,9 @@ export default function Nav() {
 
       {/* mobile menu */}
       {menuOpen && (
-        <div className="sm:hidden border-t border-ctp-surface0/50 bg-ctp-base/95 backdrop-blur-md px-6 pb-4 pt-2">
-          {links.map((link) => (
-            <button
-              key={link.label}
-              type="button"
-              onClick={() => {
-                link.action();
-                setMenuOpen(false);
-              }}
-              className="block w-full text-left py-2.5 text-xs text-ctp-subtext0 hover:text-ctp-text transition-colors"
-            >
-              {link.label}
-            </button>
-          ))}
-        </div>
+        <nav id="mobile-nav" className="sm:hidden flex flex-col items-start gap-1 border-t border-ctp-surface0/50 bg-ctp-base/95 backdrop-blur-md px-6 pb-4 pt-2 [&>*]:py-2">
+          {items}
+        </nav>
       )}
     </header>
   );

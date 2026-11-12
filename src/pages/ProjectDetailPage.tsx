@@ -6,7 +6,7 @@ const textLink = 'text-[11px] text-ctp-subtext0 hover:text-ctp-text transition-c
 function Video({ src }: { src: string }) {
   return (
     <div className="video-frame">
-      <video autoPlay loop muted playsInline preload="auto">
+      <video autoPlay loop muted playsInline preload="metadata" aria-hidden="true">
         <source src={src} type="video/mp4" />
       </video>
     </div>

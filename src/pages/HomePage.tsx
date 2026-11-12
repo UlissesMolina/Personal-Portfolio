@@ -37,7 +37,7 @@ export default function HomePage() {
           Student software developer @ Auburn RFID Lab. Studying at Auburn University. Interested in full-stack development or AI development. Feel free to{' '}
           <button type="button" onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })} className="text-ctp-accent hover:text-ctp-accent/80 transition-colors">reach out</button>!
         </p>
-        <div className="flex items-center gap-4 mt-5 text-xs">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-5 text-xs">
           <a href={`https://github.com/${GITHUB_USERNAME}`} target="_blank" rel="noopener noreferrer" className={textLink}>github</a>
           <span className="text-ctp-surface1">·</span>
           <a href="https://www.linkedin.com/in/ulissesmolina" target="_blank" rel="noopener noreferrer" className={textLink}>linkedin</a>
@@ -110,7 +110,7 @@ export default function HomePage() {
       <footer id="contact" className="section-strip scroll-mt-20">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
           <div>
-            <p className="text-lg font-medium text-ctp-text mb-2">get in touch</p>
+            <h2 className="text-lg font-medium text-ctp-text mb-2">get in touch</h2>
             <a href={`mailto:${EMAIL}`} className="text-sm text-ctp-accent hover:text-ctp-accent/80 transition-colors">
               {EMAIL}
             </a>

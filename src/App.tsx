@@ -4,7 +4,6 @@ import Nav from './components/Nav';
 import HomePage from './pages/HomePage';
 import ProjectsPage from './pages/ProjectsPage';
 import ProjectDetailPage from './pages/ProjectDetailPage';
-import { initTheme } from './components/Widgets';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -15,10 +14,6 @@ function ScrollToTop() {
 }
 
 export default function App() {
-  useEffect(() => {
-    initTheme();
-  }, []);
-
   return (
     <BrowserRouter>
       <ScrollToTop />
