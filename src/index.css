@@ -790,3 +790,25 @@ button:hover > .arrow-nudge {
     row-gap: 4px;
   }
 }
+
+/* ── next project link ── */
+.next-project {
+  margin-top: 64px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ── video ── */
+.video-frame {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.video-frame video {
+  display: block;
+  width: 100%;
+  height: auto;
+}

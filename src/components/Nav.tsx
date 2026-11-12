@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { motion } from 'motion/react';
 import { getThemeState, toggleLightDark } from './Widgets';
 
 export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [hovered, setHovered] = useState<string | null>(null);
   const [isDark, setIsDark] = useState(() => getThemeState().isDark);
   const location = useLocation();
   const navigate = useNavigate();
@@ -26,9 +24,9 @@ export default function Nav() {
     {
       label: 'projects',
       action: () => navigate('/projects'),
-      active: location.pathname === '/projects',
+      active: location.pathname.startsWith('/projects'),
     },
-{
+    {
       label: 'resume',
       action: () => window.open('/uliResume.pdf', '_blank'),
     },
@@ -39,48 +37,32 @@ export default function Nav() {
       <div className="mx-auto max-w-content w-full flex items-center justify-between px-8 py-4">
         <Link
           to="/"
-          className="group/logo relative text-sm font-medium text-ctp-text tracking-tight hover:text-ctp-accent transition-colors"
+          className="text-sm font-medium text-ctp-text tracking-tight hover:text-ctp-accent transition-colors"
         >
           umolina.com
         </Link>
 
         {/* desktop nav */}
-        <nav
-          className="hidden sm:flex items-center gap-1 relative"
-          onMouseLeave={() => setHovered(null)}
-        >
+        <nav className="hidden sm:flex items-center gap-6">
           {links.map((link) => (
             <button
               key={link.label}
               type="button"
               onClick={link.action}
-              onMouseEnter={() => setHovered(link.label)}
-              className={`relative z-10 px-3 py-1.5 text-xs transition-colors rounded-full ${
-                link.active
-                  ? 'text-ctp-text'
-                  : 'text-ctp-subtext0 hover:text-ctp-text'
+              className={`text-xs transition-colors ${
+                link.active ? 'text-ctp-text' : 'text-ctp-subtext0 hover:text-ctp-text'
               }`}
             >
-              {hovered === link.label && (
-                <motion.span
-                  layoutId="nav-pill"
-                  className="absolute inset-0 rounded-full bg-ctp-surface0/20 border border-ctp-surface0/40"
-                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                />
-              )}
-              <span className="relative z-10">{link.label}</span>
+              {link.label}
             </button>
           ))}
         </nav>
 
-        {/* light/dark toggle */}
         <div className="flex items-center gap-2">
+          {/* light/dark toggle */}
           <button
             type="button"
-            onClick={() => {
-              const newIsDark = toggleLightDark();
-              setIsDark(newIsDark);
-            }}
+            onClick={() => setIsDark(toggleLightDark())}
             className="text-ctp-subtext0 hover:text-ctp-text transition-colors p-1.5"
             aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
           >
