@@ -74,7 +74,7 @@ export default function ProjectDetailPage() {
             {project.longDescription}
           </p>
 
-          <p className="text-[10px] text-ctp-overlay0 mb-5">{project.tags.join(' · ')}</p>
+          <p className="text-[11px] text-ctp-overlay0 mb-5">{project.tags.join(' · ')}</p>
 
           <div className="flex items-center gap-6">
             {project.demoUrl && (

@@ -74,17 +74,17 @@ export const projects: Project[] = [
     description:
       'Job application tracker with a Kanban board, timeline, and GPT-4o cover letter generation.',
     longDescription:
-      'A job application tracker built around a drag-and-drop Kanban board. Each application carries a status timeline, notes, interviews, and tags, and a cover letter generator sends the job description and your resume to GPT-4o to draft a first version. Built with React, TypeScript, Express, and Prisma on PostgreSQL, with Clerk for auth.',
+      'A job application tracker built around a drag-and-drop Kanban board. Each application carries a status timeline, notes, interviews, and tags, and a cover letter generator sends the job description and your saved resume to GPT-4o for a first draft. Built with React, TypeScript, Express, and Prisma on PostgreSQL, with Clerk for auth.',
     sections: [
       {
         title: 'board and timeline',
         body:
-          'Applications move across Applied, Interview, Offer, and Rejected columns. Every status change is recorded so the detail page can show a timeline from first apply to final outcome, alongside interview dates, online assessments, and follow-up reminders.',
+          'Applications move across Saved, Applied, Interview, Offer, and Rejected columns. Every status change is recorded so the detail page can show a timeline from first apply to final outcome, alongside interview dates, online assessments, and follow-up reminders.',
       },
       {
         title: 'cover letters',
         body:
-          'Paste a job description and pick a stored resume. The server builds a prompt from both and streams a draft back from GPT-4o, which you can edit and save against the application. Resumes are stored per user so the same one can be reused across many letters.',
+          'Paste a job description and the server combines it with your saved resume into a prompt for GPT-4o. The draft comes back as editable text you can save on the application. One resume is stored per account, so it is reused for every letter.',
       },
     ],
     tags: ['react', 'typescript', 'node.js', 'openai'],
@@ -113,7 +113,7 @@ export const projects: Project[] = [
     description:
       'Full-stack prediction system for the 2026 FIFA World Cup. XGBoost & PyTorch models on 45k+ matches, FastAPI predictions, Monte Carlo simulations.',
     longDescription:
-      'A prediction system for the 2026 FIFA World Cup. XGBoost and PyTorch models are trained on more than 45,000 historical international matches, and a FastAPI service serves win probabilities for any matchup. On top of that, Monte Carlo simulations run the full 48-team bracket thousands of times to estimate how far each side is likely to go.',
+      'A prediction system for the 2026 FIFA World Cup. XGBoost and PyTorch models are trained on more than 45,000 historical international matches, and a FastAPI service serves win probabilities for any matchup. Monte Carlo simulations then run the full 48-team bracket thousands of times to estimate how far each side is likely to go.',
     sections: [],
     tags: ['python', 'pytorch', 'fastapi', 'xgboost'],
     githubUrl: 'https://github.com/UlissesMolina/worldCup',
