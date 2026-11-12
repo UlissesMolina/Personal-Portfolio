@@ -74,13 +74,7 @@ export default function ProjectDetailPage() {
             {project.longDescription}
           </p>
 
-          <div className="flex flex-wrap gap-x-3 gap-y-1 mb-5">
-            {project.tags.map((tag) => (
-              <span key={tag.label} className="text-[10px] text-ctp-overlay0">
-                {tag.label}
-              </span>
-            ))}
-          </div>
+          <p className="text-[10px] text-ctp-overlay0 mb-5">{project.tags.join(' · ')}</p>
 
           <div className="flex items-center gap-6">
             {project.demoUrl && (

@@ -26,8 +26,9 @@ export default function ProjectRow({ project }: { project: Project }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={linkClass}
+                aria-label={`${project.title} live site`}
               >
-                live ↗
+                live <span aria-hidden="true">↗</span>
               </a>
             )}
             <a
@@ -35,8 +36,9 @@ export default function ProjectRow({ project }: { project: Project }) {
               target="_blank"
               rel="noopener noreferrer"
               className={linkClass}
+              aria-label={`${project.title} source code`}
             >
-              code ↗
+              code <span aria-hidden="true">↗</span>
             </a>
           </div>
         </div>
@@ -46,7 +48,7 @@ export default function ProjectRow({ project }: { project: Project }) {
         </p>
 
         <p className="text-[11px] text-ctp-overlay0 mt-1.5">
-          {project.tags.map((t) => t.label).join(' · ')}
+          {project.tags.join(' · ')}
         </p>
       </div>
     </article>

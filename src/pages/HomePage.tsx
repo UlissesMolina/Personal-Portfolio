@@ -2,9 +2,8 @@ import { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { experiences, featuredProjects, EMAIL, GITHUB_USERNAME, YOUTUBE_CHANNEL } from '../data';
-import TagList from '../components/TagList';
 import ProjectRow from '../components/ProjectRow';
-import { NowPlayingWidget, RecentCommitsWidget, LatestUploadWidget } from '../components/Widgets';
+import { NowPlayingWidget, RecentCommitsWidget } from '../components/Widgets';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
@@ -130,7 +129,7 @@ export default function HomePage() {
               <p className="text-xs text-ctp-subtext1 leading-relaxed mb-2">
                 {exp.description}
               </p>
-              <TagList tags={exp.tags} />
+              <p className="text-[11px] text-ctp-overlay0">{exp.tags.join(' · ')}</p>
             </motion.div>
           ))}
         </div>
