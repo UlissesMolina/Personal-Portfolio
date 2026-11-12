@@ -4,7 +4,7 @@ import { motion } from 'motion/react';
 import { experiences, featuredProjects, EMAIL, GITHUB_USERNAME, YOUTUBE_CHANNEL } from '../data';
 import TagList from '../components/TagList';
 import ProjectCard from '../components/ProjectCard';
-import { NowPlayingWidget, RecentCommitsWidget, LatestUploadWidget } from '../components/Widgets';
+import ProjectRow from '../components/ProjectRow';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
@@ -157,18 +157,9 @@ export default function HomePage() {
           />
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {featuredProjects.map((project, i) => (
-            <motion.div
-              key={project.title}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-40px' }}
-              variants={scrollReveal}
-              transition={{ delay: i * 0.1 }}
-            >
-              <ProjectCard project={project} />
-            </motion.div>
+        <div className="flex flex-col">
+          {featuredProjects.map((project) => (
+            <ProjectRow key={project.slug} project={project} />
           ))}
         </div>
       </section>
