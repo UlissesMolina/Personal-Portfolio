@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
-import { SPOTIFY_ENDPOINT, GITHUB_USERNAME, videos } from '../data';
+import { SPOTIFY_ENDPOINT, GITHUB_USERNAME } from '../data';
 
 // ─── types ───────────────────────────────────────────────────────────────────
 
@@ -382,63 +382,6 @@ export function NowPlayingWidget() {
         </div>
       )}
     </div>
-  );
-}
-
-// ─── latest upload ───────────────────────────────────────────────────────────
-
-export function LatestUploadWidget() {
-  const latest = videos[0];
-  if (!latest) return null;
-
-  return (
-    <a
-      href={latest.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="grid grid-cols-[240px_1fr] gap-5 items-center no-underline group max-sm:grid-cols-1"
-    >
-      {/* thumbnail */}
-      <div className="video-thumbnail relative w-full aspect-video rounded-md overflow-hidden bg-ctp-surface0/30 shrink-0">
-        <img
-          src={latest.thumbnailUrl}
-          alt={latest.title}
-          className="w-full h-full object-cover"
-          loading="lazy"
-          onError={(e) => {
-            (e.target as HTMLImageElement).style.display = 'none';
-          }}
-        />
-        <span className="play-pill">watch ↗</span>
-        <span className="absolute bottom-1 right-1 text-[9px] bg-ctp-base/80 text-ctp-text px-1 py-0.5 rounded font-medium z-10">
-          {latest.duration}
-        </span>
-      </div>
-
-      {/* content */}
-      <div className="flex flex-col min-w-0 flex-1">
-        <div className="flex items-center gap-1.5 mb-2">
-          <svg className="w-3.5 h-3.5 text-ctp-accent shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="15" y2="18" />
-          </svg>
-          <span className="text-[11px] text-ctp-overlay0">latest upload</span>
-        </div>
-
-        <p className="text-xs text-ctp-text leading-snug mb-1 group-hover:text-ctp-accent transition-colors line-clamp-2">
-          {latest.title}
-        </p>
-        <p className="text-[10px] text-ctp-overlay0 tracking-wide">{latest.tag}</p>
-
-        <div className="flex items-center gap-1 mt-auto pt-2">
-          <span className="text-[10px] text-ctp-subtext0 group-hover:text-ctp-accent transition-colors">
-            watch on youtube
-          </span>
-          <svg className="w-2.5 h-2.5 text-ctp-subtext0 group-hover:text-ctp-accent transition-colors arrow-nudge" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M7 17 17 7" /><path d="M7 7h10v10" />
-          </svg>
-        </div>
-      </div>
-    </a>
   );
 }
 
