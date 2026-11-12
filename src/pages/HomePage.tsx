@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { experiences, featuredProjects, EMAIL, GITHUB_USERNAME, YOUTUBE_CHANNEL } from '../data';
 import TagList from '../components/TagList';
-import ProjectCard from '../components/ProjectCard';
 import ProjectRow from '../components/ProjectRow';
+import { NowPlayingWidget, RecentCommitsWidget, LatestUploadWidget } from '../components/Widgets';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
