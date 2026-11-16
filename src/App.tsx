@@ -4,6 +4,7 @@ import Nav from './components/Nav';
 import HomePage from './pages/HomePage';
 import ProjectsPage from './pages/ProjectsPage';
 import ProjectDetailPage from './pages/ProjectDetailPage';
+import { EMAIL } from './data';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -17,15 +18,18 @@ export default function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <div className="min-h-screen bg-ctp-base text-ctp-text font-mono">
+      <div className="page">
         <Nav />
-        <div className="page-wrapper min-h-[calc(100vh-57px)]">
+        <main>
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/projects/:slug" element={<ProjectDetailPage />} />
           </Routes>
-        </div>
+        </main>
+        <footer className="site-footer meta">
+          © {new Date().getFullYear()} Ulisses Molina · <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+        </footer>
       </div>
     </BrowserRouter>
   );
