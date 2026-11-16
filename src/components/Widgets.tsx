@@ -16,8 +16,7 @@ function getStoredTheme(): Theme | null {
 }
 
 export function currentTheme(): Theme {
-  return getStoredTheme()
-    ?? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  return getStoredTheme() ?? 'light';
 }
 
 export function initTheme() {

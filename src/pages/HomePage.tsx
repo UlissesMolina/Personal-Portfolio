@@ -1,49 +1,52 @@
 import { Link } from 'react-router-dom';
-import { experiences, featuredProjects, EMAIL, GITHUB_USERNAME } from '../data';
-import ProjectRow from '../components/ProjectRow';
+import { experiences, featuredProjects } from '../data';
+import Hero from '../components/Hero';
+import ProjectCard from '../components/ProjectCard';
 import { NowPlaying, RecentCommits } from '../components/Widgets';
+
+// "08.2026 – present" → "8/26 – Now"
+function shortPeriod(period: string) {
+  return period
+    .replace(/(\d{2})\.\d{2}(\d{2})/g, (_, m: string, y: string) => `${Number(m)}/${y}`)
+    .replace('present', 'Now');
+}
 
 export default function HomePage() {
   return (
     <>
-      <h1>Ulisses Molina</h1>
-      <p>
-        I study software engineering at Auburn University and work as a student developer at the
-        Auburn RFID Lab. I'm mostly interested in full-stack and AI development. My five-person
-        team won codeLinc 11 with Molar Money, a dental benefits copilot that estimates procedure
-        costs and plans treatment across plan years.
-      </p>
-      <p>
-        You can find me on <a href={`https://github.com/${GITHUB_USERNAME}`}>GitHub</a>{' '}
-        and <a href="https://www.linkedin.com/in/ulissesmolina">LinkedIn</a>, read
-        my <a href="/uliResume.pdf">resume</a>, or email me at <a href={`mailto:${EMAIL}`}>{EMAIL}</a>.
-      </p>
+      <Hero />
 
-      <h2 id="work">Work</h2>
-      <ul className="entries">
-        {experiences.map((exp) => (
-          <li key={`${exp.company}-${exp.title}`}>
-            <div className="entry-head">
-              <h3>{exp.title}, {exp.company}</h3>
-              <span className="meta">{exp.period}</span>
-            </div>
-            <p>{exp.description}</p>
-            <div className="meta">{exp.tags.join(', ')}</div>
-          </li>
-        ))}
-      </ul>
+      <section id="experience">
+        <h2>Experience</h2>
+        <ul className="timeline">
+          {experiences.map((exp, i) => (
+            <li key={`${exp.company}-${exp.title}`}>
+              <span className={i === 0 ? 'when now' : 'when'}>{shortPeriod(exp.period)}</span>
+              <div>
+                <div>{exp.company}</div>
+                <div className="dim">{exp.title}</div>
+                <p className="desc">{exp.description}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
 
-      <h2 id="projects">Projects</h2>
-      <ul className="entries">
-        {featuredProjects.map((project) => (
-          <ProjectRow key={project.slug} project={project} />
-        ))}
-      </ul>
-      <p><Link to="/projects">All projects →</Link></p>
+      <section id="projects">
+        <h2>Projects</h2>
+        <ul className="cards">
+          {featuredProjects.map((project) => (
+            <ProjectCard key={project.slug} project={project} />
+          ))}
+        </ul>
+        <Link to="/projects" className="more">View all projects →</Link>
+      </section>
 
-      <h2>Lately</h2>
-      <NowPlaying />
-      <RecentCommits />
+      <section id="lately">
+        <h2>Lately</h2>
+        <NowPlaying />
+        <RecentCommits />
+      </section>
     </>
   );
 }
