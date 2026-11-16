@@ -30,7 +30,6 @@ export interface Project {
 
 export const GITHUB_USERNAME = 'UlissesMolina';
 export const EMAIL = 'umolina2005@gmail.com';
-export const YOUTUBE_CHANNEL = 'https://www.youtube.com/@ulissesCodes';
 
 // Spotify proxy endpoint (Netlify function).
 // Returns { isPlaying, track, artist, progressMs, durationMs } or { isPlaying: false }
@@ -44,7 +43,7 @@ export const experiences: Experience[] = [
     company: 'Auburn RFID Lab',
     period: '08.2026 – present',
     description:
-      'Developing and maintaining internal software for RFID research systems.',
+      'Working on the internal tools the lab uses to run its RFID research.',
     tags: ['go', 'node.js', 'sql'],
   },
   {
@@ -52,7 +51,7 @@ export const experiences: Experience[] = [
     company: 'Room2Room Movers',
     period: '01.2026 – 05.2026',
     description:
-      'Built internal dashboards in React used daily by operations staff to manage jobs and scheduling. Designed and shipped UI components focused on speed, clarity, and mobile usability.',
+      'Built the React dashboards the operations staff use every day to schedule and track moving jobs, including the mobile layouts.',
     tags: ['react', 'docker', 'node.js'],
   },
   {
@@ -60,7 +59,7 @@ export const experiences: Experience[] = [
     company: 'OCV, LLC',
     period: '09.2025 – 08.2026',
     description:
-      'Contributed to client-facing business software handling real user data and workflows. Improved reliability through bug fixes, test coverage, and code review.',
+      "Worked on software that OCV's clients use to run their businesses. Mostly fixing bugs, writing tests, and reviewing pull requests.",
     tags: ['xcode', 'github', 'aws'],
   },
 ];
