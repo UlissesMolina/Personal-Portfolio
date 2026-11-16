@@ -8,7 +8,7 @@ My personal portfolio. You can check it out at <a href="https://umolina.com">umo
 ## Tech stack
 
 - React 19, TypeScript, Vite 7
-- Tailwind CSS 3 (Catppuccin palette)
+- Plain CSS (one stylesheet, no framework)
 
 
 ## Project structure
@@ -17,7 +17,7 @@ My personal portfolio. You can check it out at <a href="https://umolina.com">umo
 src/
   main.tsx              # App mount, global CSS + font imports
   App.tsx               # Router, theme init, page layout
-  index.css             # Tailwind layers, animations, theming
+  index.css             # All styles and light/dark theme tokens
   data.ts               # Project/experience data
   components/
     Nav.tsx             # Navigation bar

@@ -40,15 +40,15 @@ export const SPOTIFY_ENDPOINT = '/api/now-playing';
 
 export const experiences: Experience[] = [
   {
-    title: 'student software developer',
+    title: 'Student software developer',
     company: 'Auburn RFID Lab',
     period: '08.2026 – present',
     description:
-      'Developing and maintaining internal software for RFID research systems',
+      'Developing and maintaining internal software for RFID research systems.',
     tags: ['go', 'node.js', 'sql'],
   },
   {
-    title: 'software engineering intern',
+    title: 'Software engineering intern',
     company: 'Room2Room Movers',
     period: '01.2026 – 05.2026',
     description:
@@ -56,7 +56,7 @@ export const experiences: Experience[] = [
     tags: ['react', 'docker', 'node.js'],
   },
   {
-    title: 'software engineering intern',
+    title: 'Software engineering intern',
     company: 'OCV, LLC',
     period: '09.2025 – 08.2026',
     description:
@@ -77,12 +77,12 @@ export const projects: Project[] = [
       'A job application tracker built around a drag-and-drop Kanban board. Each application carries a status timeline, notes, interviews, and tags, and a cover letter generator sends the job description and your saved resume to GPT-4o for a first draft. Built with React, TypeScript, Express, and Prisma on PostgreSQL, with Clerk for auth.',
     sections: [
       {
-        title: 'board and timeline',
+        title: 'Board and timeline',
         body:
           'Applications move across Saved, Applied, Interview, Offer, and Rejected columns. Every status change is recorded so the detail page can show a timeline from first apply to final outcome, alongside interview dates, online assessments, and follow-up reminders.',
       },
       {
-        title: 'cover letters',
+        title: 'Cover letters',
         body:
           'Paste a job description and the server combines it with your saved resume into a prompt for GPT-4o. The draft comes back as editable text you can save on the application. One resume is stored per account, so it is reused for every letter.',
       },
@@ -96,7 +96,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'tiger-scheduler',
-    title: 'tiger scheduler',
+    title: 'Tiger Scheduler',
     description:
       'Auto-register tool for Auburn University course scheduling. Automates seat monitoring and registration.',
     longDescription:
@@ -109,7 +109,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'world-cup',
-    title: 'world cup predictor',
+    title: 'World Cup Predictor',
     description:
       'Full-stack prediction system for the 2026 FIFA World Cup. XGBoost & PyTorch models on 45k+ matches, FastAPI predictions, Monte Carlo simulations.',
     longDescription:
@@ -123,7 +123,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'expense-flow',
-    title: 'expense flow',
+    title: 'Expense Flow',
     description:
       'REST API for expense report submissions. JWT auth, role-based access, multi-step approval workflow.',
     longDescription:
@@ -136,7 +136,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'clarity',
-    title: 'clarity finance',
+    title: 'Clarity Finance',
     description:
       'Personal finance dashboard. Income, expenses, savings, spending trends.',
     longDescription:
