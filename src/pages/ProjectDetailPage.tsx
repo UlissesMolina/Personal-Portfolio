@@ -3,7 +3,7 @@ import { projects } from '../data';
 
 function Video({ src }: { src: string }) {
   return (
-    <video autoPlay loop muted playsInline preload="metadata" aria-hidden="true">
+    <video className="framed" autoPlay loop muted playsInline preload="metadata" aria-hidden="true">
       <source src={src} type="video/mp4" />
     </video>
   );
@@ -20,7 +20,7 @@ export default function ProjectDetailPage() {
 
   return (
     <article>
-      <h1>{project.title}</h1>
+      <h1 className="page-title">{project.title}</h1>
       <p className="meta">
         {project.year} · {project.tags.join(', ')}
         {project.demoUrl && <> · <a href={project.demoUrl} target="_blank" rel="noopener noreferrer">live</a></>}
@@ -39,7 +39,7 @@ export default function ProjectDetailPage() {
         </section>
       ))}
 
-      <p style={{ marginTop: '3rem' }}>
+      <p className="more">
         Next: <Link to={`/projects/${nextProject.slug}`}>{nextProject.title}</Link>
       </p>
     </article>

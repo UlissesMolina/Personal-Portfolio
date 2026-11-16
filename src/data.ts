@@ -20,6 +20,8 @@ export interface Project {
   sections: ProjectSection[];
   tags: string[];
   heroVideo?: string;
+  // still image for cards (also the video poster)
+  cover?: string;
   githubUrl: string;
   demoUrl: string | null;
   year: string;
@@ -30,6 +32,7 @@ export interface Project {
 
 export const GITHUB_USERNAME = 'UlissesMolina';
 export const EMAIL = 'umolina2005@gmail.com';
+export const LINKEDIN_URL = 'https://www.linkedin.com/in/ulissesmolina';
 
 // Spotify proxy endpoint (Netlify function).
 // Returns { isPlaying, track, artist, progressMs, durationMs } or { isPlaying: false }
@@ -143,6 +146,7 @@ export const projects: Project[] = [
     sections: [],
     tags: ['react', 'typescript', 'css'],
     heroVideo: '/previews/clarityFinance-h264.mp4',
+    cover: '/previews/clarity_finance_cover.png',
     githubUrl: 'https://github.com/UlissesMolina/FinanceDashBoard',
     demoUrl: 'https://clarityfi.netlify.app/',
     year: '2025',
