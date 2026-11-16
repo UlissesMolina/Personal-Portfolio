@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { experiences, featuredProjects, EMAIL, GITHUB_USERNAME, YOUTUBE_CHANNEL } from '../data';
+import { experiences, featuredProjects, EMAIL, GITHUB_USERNAME } from '../data';
 import ProjectRow from '../components/ProjectRow';
 import { NowPlaying, RecentCommits } from '../components/Widgets';
 
@@ -9,13 +9,14 @@ export default function HomePage() {
       <h1>Ulisses Molina</h1>
       <p>
         I study software engineering at Auburn University and work as a student developer at the
-        Auburn RFID Lab. I'm mostly interested in full-stack and AI development.
+        Auburn RFID Lab. I'm mostly interested in full-stack and AI development. My five-person
+        team won codeLinc 11 with Molar Money, a dental benefits copilot that estimates procedure
+        costs and plans treatment across plan years.
       </p>
       <p>
-        You can find me on <a href={`https://github.com/${GITHUB_USERNAME}`}>GitHub</a>,{' '}
-        <a href="https://www.linkedin.com/in/ulissesmolina">LinkedIn</a>, and{' '}
-        <a href={YOUTUBE_CHANNEL}>YouTube</a>, read my <a href="/uliResume.pdf">resume</a>, or email
-        me at <a href={`mailto:${EMAIL}`}>{EMAIL}</a>.
+        You can find me on <a href={`https://github.com/${GITHUB_USERNAME}`}>GitHub</a>{' '}
+        and <a href="https://www.linkedin.com/in/ulissesmolina">LinkedIn</a>, read
+        my <a href="/uliResume.pdf">resume</a>, or email me at <a href={`mailto:${EMAIL}`}>{EMAIL}</a>.
       </p>
 
       <h2 id="work">Work</h2>
