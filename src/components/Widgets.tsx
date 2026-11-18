@@ -37,6 +37,8 @@ interface SpotifyData {
   track?: string;
   artist?: string;
   spotifyUrl?: string;
+  lastTrack?: string;
+  lastArtist?: string;
 }
 
 interface SavedTrack {
@@ -73,6 +75,10 @@ export function NowPlaying() {
           setPlaying(true);
         } else {
           setPlaying(false);
+          // First-time visitors have nothing saved, so fall back to the server's last track.
+          if (json.lastTrack && json.lastArtist) {
+            setTrack(prev => prev ?? { track: json.lastTrack!, artist: json.lastArtist! });
+          }
         }
       } catch { /* keep last known track */ }
     };

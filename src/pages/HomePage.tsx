@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { experiences, featuredProjects } from '../data';
 import Hero from '../components/Hero';
 import ProjectCard from '../components/ProjectCard';
-import { NowPlaying, RecentCommits } from '../components/Widgets';
+import { RecentCommits } from '../components/Widgets';
 
 // "08.2026 – present" → "8/26 – Now"
 function shortPeriod(period: string) {
@@ -44,7 +44,7 @@ export default function HomePage() {
 
       <section id="lately">
         <h2>Lately</h2>
-        <NowPlaying />
+        {/* <NowPlaying /> hidden until the Spotify refresh token is renewed */}
         <RecentCommits />
       </section>
     </>
