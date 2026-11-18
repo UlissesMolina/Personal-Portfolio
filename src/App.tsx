@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import ProjectsPage from './pages/ProjectsPage';
 import ProjectDetailPage from './pages/ProjectDetailPage';
 import Socials from './components/Socials';
+import VisitCount from './components/VisitCount';
 import { useReveal } from './components/useReveal';
 
 // New page → top; "/#section" links → that section.
@@ -38,7 +39,7 @@ export default function App() {
           </Routes>
         </main>
         <footer className="site-footer">
-          <span>© {new Date().getFullYear()} Ulisses Molina</span>
+          <span>© {new Date().getFullYear()} Ulisses Molina <VisitCount /></span>
           <span className="footer-right">Auburn, AL <Socials /></span>
         </footer>
       </div>
