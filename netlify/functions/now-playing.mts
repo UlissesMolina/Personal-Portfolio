@@ -30,6 +30,9 @@ async function getAccessToken(): Promise<string> {
   });
 
   const data = await res.json();
+  if (!res.ok || !data.access_token) {
+    throw new Error(`Spotify token refresh failed: ${data.error_description ?? data.error ?? res.status}`);
+  }
   return data.access_token;
 }
 
@@ -101,7 +104,8 @@ export default async (_req: Request, _context: Context) => {
       }),
       { headers }
     );
-  } catch {
+  } catch (err) {
+    console.error(err);
     return new Response(
       JSON.stringify({ isPlaying: false }),
       { headers }

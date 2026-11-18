@@ -24,12 +24,13 @@ export default function Hero() {
       <div className="hero-top">
         <div>
           <h1><HoverText text="Hey, I'm Ulisses" /></h1>
-          <p className="tagline">I build full-stack and AI products.</p>
+          <p className="tagline">Interested in full-stack and AI products.</p>
         </div>
         <Photo />
       </div>
 
       <ul className="roles">
+        <li><span className="dim">Incoming SWE Intern @</span> Capital One, 2027</li>
         <li><span className="dim">Software Engineering @</span> Auburn University</li>
         <li><span className="dim">Student Developer @</span> Auburn RFID Lab</li>
       </ul>
