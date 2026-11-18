@@ -54,7 +54,7 @@ export const experiences: Experience[] = [
     company: 'Room2Room Movers',
     period: '01.2026 – 05.2026',
     description:
-      'Built the React dashboards the operations staff use every day to schedule and track moving jobs, including the mobile layouts.',
+      'Built external features and internal dashboards the operations staff use every day to schedule and track moving jobs, including the mobile layouts.',
     tags: ['react', 'docker', 'node.js'],
   },
   {
@@ -62,7 +62,7 @@ export const experiences: Experience[] = [
     company: 'OCV, LLC',
     period: '09.2025 – 08.2026',
     description:
-      "Worked on software that OCV's clients use to run their businesses. Mostly fixing bugs, writing tests, and reviewing pull requests.",
+      "Worked on external software that OCV's clients use to run their businesses. Mostly quality checks and collaborating with others.",
     tags: ['xcode', 'github', 'aws'],
   },
 ];
