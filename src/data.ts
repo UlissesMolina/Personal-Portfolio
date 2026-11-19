@@ -97,6 +97,20 @@ export const projects: Project[] = [
     featured: true,
   },
   {
+    slug: 'molar-money',
+    title: 'Molar Money',
+    description:
+      'Won codeLinc 11. Dental benefits copilot that estimates procedure costs and plans treatment across plan years.',
+    longDescription:
+      'Molar Money won codeLinc 11, built by a five-person team. It is an assistant for people with employer dental insurance that answers three questions in plain language: what a procedure will cost, when to schedule care to pay the least, and what coverage is left this year. A Python money engine does every calculation, and an AI assistant on the Anthropic API explains the results by calling that engine through tools, with a guard that checks every dollar figure in an answer came from a tool result. React and TypeScript on the front end, FastAPI and SQLite on the back end. All plan and member data is synthetic.',
+    sections: [],
+    tags: ['react', 'typescript', 'fastapi', 'anthropic'],
+    githubUrl: 'https://github.com/calebabr/codelinc11',
+    demoUrl: null,
+    year: '2026',
+    featured: true,
+  },
+  {
     slug: 'tiger-scheduler',
     title: 'Tiger Scheduler',
     description:
@@ -121,7 +135,6 @@ export const projects: Project[] = [
     githubUrl: 'https://github.com/UlissesMolina/worldCup',
     demoUrl: null,
     year: '2025',
-    featured: true,
   },
   {
     slug: 'expense-flow',
