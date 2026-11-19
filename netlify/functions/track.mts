@@ -41,6 +41,8 @@ export default async (req: Request, context: Context) => {
         ip: context.ip,
         city: context.geo?.city ?? null,
         region: context.geo?.subdivision?.name ?? null,
+        lat: context.geo?.latitude ?? null,
+        lon: context.geo?.longitude ?? null,
         referrer: str(body.referrer),
         bot: botSignal(req),
       }),
