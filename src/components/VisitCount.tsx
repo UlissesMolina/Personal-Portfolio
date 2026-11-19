@@ -10,6 +10,15 @@ export default function VisitCount() {
     let seen = false;
     try { seen = sessionStorage.getItem(SEEN_KEY) === '1'; } catch { /* storage blocked */ }
 
+    if (!seen) {
+      fetch('/api/track', {
+        method: 'POST',
+        keepalive: true,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path: location.pathname, referrer: document.referrer }),
+      }).catch(() => {});
+    }
+
     fetch('/api/visits', { method: seen ? 'GET' : 'POST', cache: 'no-store' })
       .then((res) => res.json())
       .then((data: { count: number | null }) => {
