@@ -7,6 +7,7 @@ import ProjectDetailPage from './pages/ProjectDetailPage';
 import Socials from './components/Socials';
 import VisitCount from './components/VisitCount';
 import { useReveal } from './components/useReveal';
+import { trackPage } from './engagement';
 
 // New page → top; "/#section" links → that section.
 function ScrollToTop() {
@@ -24,11 +25,18 @@ function RevealOnScroll() {
   return null;
 }
 
+function TrackPageViews() {
+  const { pathname } = useLocation();
+  useEffect(() => trackPage(pathname), [pathname]);
+  return null;
+}
+
 export default function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
       <RevealOnScroll />
+      <TrackPageViews />
       <div className="page">
         <Nav />
         <main>

@@ -34,6 +34,30 @@ async function logClick(body: Record<string, unknown>) {
   if (!res.ok) console.error("track: click write failed", res.status, await res.text());
 }
 
+const clampSeconds = (v: unknown) => Math.min(86_400, Math.max(0, Math.round(Number(v) || 0)));
+
+// POST { visit, seconds, pages, sections } → replaces /visitors/<visit>/engagement with the latest totals.
+async function logEngagement(body: Record<string, unknown>) {
+  const seconds = clampSeconds(body.seconds);
+  if (typeof body.visit !== "string" || !VISIT_ID.test(body.visit) || !seconds) return;
+  const pages = (Array.isArray(body.pages) ? body.pages : [])
+    .filter((p): p is string => typeof p === "string" && p.startsWith("/"))
+    .slice(0, 30)
+    .map((p) => p.slice(0, 100));
+  const sections: Record<string, number> = {};
+  if (body.sections && typeof body.sections === "object") {
+    for (const [id, value] of Object.entries(body.sections).slice(0, 20)) {
+      if (/^[-\w]{1,40}$/.test(id)) sections[id] = clampSeconds(value);
+    }
+  }
+  const res = await fetch(`${DATABASE_URL}/visitors/${body.visit}/engagement.json`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ seconds, pages, sections, updated: { ".sv": "timestamp" } }),
+  });
+  if (!res.ok) console.error("track: engagement write failed", res.status, await res.text());
+}
+
 // POST { path, referrer, visitor } → one pushed entry under /visitors; responds with its { id } for later clicks.
 export default async (req: Request, context: Context) => {
   if (req.method !== "POST") return new Response(null, { status: 405 });
@@ -44,6 +68,10 @@ export default async (req: Request, context: Context) => {
 
   if (body.type === "click") {
     try { await logClick(body); } catch (err) { console.error("track: click write failed", err); }
+    return new Response(null, { status: 204 });
+  }
+  if (body.type === "engagement") {
+    try { await logEngagement(body); } catch (err) { console.error("track: engagement write failed", err); }
     return new Response(null, { status: 204 });
   }
 

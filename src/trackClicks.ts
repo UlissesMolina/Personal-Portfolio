@@ -20,7 +20,7 @@ export function saveVisitId(id: string) {
   try { sessionStorage.setItem(VISIT_KEY, id); } catch { /* storage blocked */ }
 }
 
-function visitId() {
+export function visitId() {
   try { return sessionStorage.getItem(VISIT_KEY); } catch { return null; }
 }
 
