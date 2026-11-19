@@ -40,9 +40,19 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   background-color: var(--bg);
+}
+
+/* Dot grid on its own fixed layer. Looks the same as a fixed body background, but the
+   browser composites it once instead of repainting the whole viewport on every scroll frame. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
   background-image: radial-gradient(var(--grid) 1px, transparent 1px);
   background-size: 22px 22px;
-  background-attachment: fixed;
+  will-change: transform;
 }
 
 .dim { color: var(--dim); }
