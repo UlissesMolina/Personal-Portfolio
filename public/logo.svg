@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    .i { stroke: #2f3a4a; fill: #2f3a4a; }
+    .f { fill: none; }
+    .ghost { opacity: .22; }
+    @media (prefers-color-scheme: dark) { .i { stroke: #ecebe8; fill: #ecebe8; } }
+  </style>
+  <path class="i f" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" transform="translate(0.5 0)" d="M5 8.5V20.5A3.5 3.5 0 0 0 12 20.5V11.5A3.5 3.5 0 0 1 19 11.5V23.5M19 11.5A3.5 3.5 0 0 1 26 11.5V23.5"/>
+</svg>
