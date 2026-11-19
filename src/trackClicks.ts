@@ -1,5 +1,20 @@
 // Logs clicks on outbound links, email, the résumé, and project pages, tied to this session's visit.
 const VISIT_KEY = 'visit-id';
+const VISITOR_KEY = 'visitor-id';
+
+// A random ID kept in this browser so return visits can be recognized; it identifies nothing else.
+export function visitorId() {
+  try {
+    let id = localStorage.getItem(VISITOR_KEY);
+    if (!id) {
+      id = crypto.randomUUID();
+      localStorage.setItem(VISITOR_KEY, id);
+    }
+    return id;
+  } catch {
+    return null;
+  }
+}
 
 export function saveVisitId(id: string) {
   try { sessionStorage.setItem(VISIT_KEY, id); } catch { /* storage blocked */ }

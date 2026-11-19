@@ -19,6 +19,7 @@ function botSignal(req: Request) {
 }
 
 const VISIT_ID = /^[-_A-Za-z0-9]{20}$/;
+const VISITOR_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const str = (v: unknown, max = 500) => (typeof v === "string" && v ? v.slice(0, max) : null);
 
 // POST { visit, href, label } → one click under /visitors/<visit>/clicks.
@@ -33,7 +34,7 @@ async function logClick(body: Record<string, unknown>) {
   if (!res.ok) console.error("track: click write failed", res.status, await res.text());
 }
 
-// POST { path, referrer } → one pushed entry under /visitors; responds with its { id } for later clicks.
+// POST { path, referrer, visitor } → one pushed entry under /visitors; responds with its { id } for later clicks.
 export default async (req: Request, context: Context) => {
   if (req.method !== "POST") return new Response(null, { status: 405 });
   if (!DATABASE_URL || IGNORE_IPS.has(context.ip)) return new Response(null, { status: 204 });
@@ -63,6 +64,7 @@ export default async (req: Request, context: Context) => {
         lat: context.geo?.latitude ?? null,
         lon: context.geo?.longitude ?? null,
         referrer: str(body.referrer),
+        visitor: typeof body.visitor === "string" && VISITOR_ID.test(body.visitor) ? body.visitor : null,
         bot: botSignal(req),
       }),
     });

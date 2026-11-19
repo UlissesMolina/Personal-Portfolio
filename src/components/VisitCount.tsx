@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { saveVisitId } from '../trackClicks';
+import { saveVisitId, visitorId } from '../trackClicks';
 
 const SEEN_KEY = 'visit-counted';
 
@@ -16,7 +16,7 @@ export default function VisitCount() {
         method: 'POST',
         keepalive: true,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ path: location.pathname, referrer: document.referrer }),
+        body: JSON.stringify({ path: location.pathname, referrer: document.referrer, visitor: visitorId() }),
       })
         .then((res) => (res.status === 200 ? res.json() : null))
         .then((data: { id?: unknown } | null) => {
