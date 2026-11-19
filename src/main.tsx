@@ -8,9 +8,11 @@ import '@fontsource/instrument-serif/400-italic.css';
 import '@fontsource/ibm-plex-mono/400.css';
 import './index.css';
 import { initTheme } from './components/Widgets';
+import { trackClicks } from './trackClicks';
 
 // Set theme before first paint
 initTheme();
+trackClicks();
 
 // Opt into entrance animations before first paint, so nothing flashes in
 // and then hides. Reduced-motion users never get the class.

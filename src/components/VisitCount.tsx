@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { saveVisitId } from '../trackClicks';
 
 const SEEN_KEY = 'visit-counted';
 
@@ -16,7 +17,12 @@ export default function VisitCount() {
         keepalive: true,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ path: location.pathname, referrer: document.referrer }),
-      }).catch(() => {});
+      })
+        .then((res) => (res.status === 200 ? res.json() : null))
+        .then((data: { id?: unknown } | null) => {
+          if (typeof data?.id === 'string') saveVisitId(data.id);
+        })
+        .catch(() => {});
     }
 
     fetch('/api/visits', { method: seen ? 'GET' : 'POST', cache: 'no-store' })
