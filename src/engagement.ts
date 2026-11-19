@@ -3,41 +3,49 @@ import { visitId } from './trackClicks';
 // Measures engaged time (tab visible and someone active in the last minute), pages viewed, and
 // seconds spent on each section with an id; sent with this session's visit for the stats dashboard.
 const IDLE_MS = 60_000;
-const IN_VIEW = 0.5; // half the section visible, or it fills half the screen
 
 let seconds = 0;
 const pages = new Set<string>();
 const sectionSeconds = new Map<string, number>();
-const inView = new Set<string>();
+let sections: HTMLElement[] = [];
 let lastActivity = Date.now();
 let lastSent = '';
-let observer: IntersectionObserver | null = null;
 
-function onIntersect(entries: IntersectionObserverEntry[]) {
-  for (const entry of entries) {
-    const id = (entry.target as HTMLElement).id;
-    const fillsScreen = entry.intersectionRect.height >= window.innerHeight * IN_VIEW;
-    if (entry.isIntersecting && (entry.intersectionRatio >= IN_VIEW || fillsScreen)) inView.add(id);
-    else inView.delete(id);
-  }
-}
-
-// Call on every route change: records the page and starts watching its sections.
+// Call on every route change: records the page and picks up its sections.
 export function trackPage(pathname: string) {
   pages.add(pathname);
-  observer?.disconnect();
-  inView.clear();
-  observer = new IntersectionObserver(onIntersect, { threshold: [0, 0.25, 0.5, 0.75, 1] });
+  sections = [];
   // Wait a frame so the new route's sections are in the DOM.
   requestAnimationFrame(() => {
-    document.querySelectorAll('main section[id]').forEach((el) => observer?.observe(el));
+    sections = [...document.querySelectorAll<HTMLElement>('main section[id]')];
   });
+}
+
+// The section under a reading line is the one being read. The line moves from 20% down the
+// screen at the top of the page to 90% at the bottom, so short sections near either end still
+// get their turn on tall screens.
+function sectionInFocus() {
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+  const line = window.innerHeight * (0.2 + 0.7 * progress);
+  let best: HTMLElement | null = null;
+  let bestDistance = Infinity;
+  for (const el of sections) {
+    const r = el.getBoundingClientRect();
+    const distance = line < r.top ? r.top - line : line > r.bottom ? line - r.bottom : 0;
+    if (distance < bestDistance) {
+      best = el;
+      bestDistance = distance;
+    }
+  }
+  return best?.id ?? null;
 }
 
 function tick() {
   if (document.visibilityState !== 'visible' || Date.now() - lastActivity > IDLE_MS) return;
   seconds++;
-  for (const id of inView) sectionSeconds.set(id, (sectionSeconds.get(id) ?? 0) + 1);
+  const id = sectionInFocus();
+  if (id) sectionSeconds.set(id, (sectionSeconds.get(id) ?? 0) + 1);
 }
 
 function flush() {
