@@ -21,13 +21,15 @@ export default async (req: Request, context: Context) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         at: { ".sv": "timestamp" },
+        time: new Date().toLocaleString("en-US", {
+          timeZone: "America/Chicago",
+          dateStyle: "medium",
+          timeStyle: "short",
+        }),
         ip: context.ip,
         city: context.geo?.city ?? null,
         region: context.geo?.subdivision?.name ?? null,
-        country: context.geo?.country?.name ?? null,
-        path: str(body.path),
         referrer: str(body.referrer),
-        userAgent: req.headers.get("user-agent"),
       }),
     });
     if (!res.ok) console.error("track: firebase write failed", res.status, await res.text());
